@@ -1,0 +1,44 @@
+{
+  "name": "express-api-starter-typescript",
+  "version": "1.2.0",
+  "description": "A basic starter for an express.js API using Typescript. Forked from w3cj/express-api-starter",
+  "main": "index.ts",
+  "scripts": {
+    "start": "tsc && node dist/src/index.js",
+    "build": "tsc",
+    "dev": "tsnd --transpile-only --respawn --ignore-watch node_modules src/index.ts",
+    "lint": "eslint --fix src",
+    "test": "ts-mocha -p ./tsconfig.json ./test/*.test.ts --exit"
+  },
+  "keywords": [],
+  "author": "Maicon Gabriel Friedel <maicon.friedel@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maiconfriedel/express-api-starter-typescript.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^3.23.3",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.7",
+    "@types/expect": "^24.3.0",
+    "@types/express": "^4.17.7",
+    "@types/helmet": "^0.0.47",
+    "@types/mocha": "^8.0.1",
+    "@types/morgan": "^1.9.1",
+    "@types/node": "^14.0.27",
+    "eslint": "^7.5.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.22.0",
+    "mocha": "^8.0.1",
+    "supertest": "^4.0.2",
+    "ts-mocha": "^7.0.0",
+    "ts-node-dev": "^1.0.0-pre.56",
+    "typescript": "^3.9.7"
+  }
+}
