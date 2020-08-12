@@ -8,7 +8,7 @@ export default async function startConnection() {
     database: path.resolve(__dirname, process.env.DATABASE_NAME),
     synchronize: true,
     logging: true,
-    entities: [path.resolve(__dirname, 'entities', '**', '*.ts')],
+    entities: [path.resolve(__dirname, 'entities', '**', '*.{ts,js}')],
 
     // eslint-disable-next-line no-console
   }).catch((error) => console.error(error));
