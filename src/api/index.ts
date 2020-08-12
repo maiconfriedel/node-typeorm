@@ -5,6 +5,7 @@ import { registry, Lifecycle } from 'tsyringe';
 
 import startConnection from '../infrastructure/database/connection';
 import UserRepository from '../infrastructure/repositories/UserRepository';
+import handleError from './middlewares/errorHandler';
 import { UserRoutes } from './routes/user.routes';
 
 dotenv.config();
@@ -30,8 +31,10 @@ class Server {
 
   start() {
     startConnection();
+    this.app.use(express.json());
     this.app.use('/users', this.userRoutes.registerUserRoutes());
     this.app.listen(3333);
+    this.app.use(handleError);
   }
 }
 

@@ -20,6 +20,7 @@ module.exports = {
         alphabetize: { order: 'asc', ignoreCase: true },
       },
     ],
+    'consistent-return': 'off',
     'no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars': 'error',
     'prettier/prettier': 'error',

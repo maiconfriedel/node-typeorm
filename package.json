@@ -28,7 +28,8 @@
     "tsyringe": "^4.3.0",
     "typedi": "^0.8.0",
     "typeorm": "0.2.25",
-    "typeorm-typedi-extensions": "^0.2.3"
+    "typeorm-typedi-extensions": "^0.2.3",
+    "yup": "^0.29.3"
   },
   "devDependencies": {
     "@types/cors": "^2.8.7",
@@ -38,6 +39,7 @@
     "@types/mocha": "^8.0.1",
     "@types/morgan": "^1.9.1",
     "@types/node": "^8.0.29",
+    "@types/yup": "^0.29.4",
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "@typescript-eslint/parser": "^3.9.0",
     "eslint": "^7.6.0",
