@@ -1,10 +1,13 @@
 import 'reflect-metadata';
+import dotenv from 'dotenv';
 import express, { Application } from 'express';
-import { UserRoutes } from './routes/user.routes';
-import startConnection from '../infrastructure/database/connection';
-
 import { registry, Lifecycle } from 'tsyringe';
+
+import startConnection from '../infrastructure/database/connection';
 import UserRepository from '../infrastructure/repositories/UserRepository';
+import { UserRoutes } from './routes/user.routes';
+
+dotenv.config();
 
 @registry([
   {
@@ -17,6 +20,7 @@ import UserRepository from '../infrastructure/repositories/UserRepository';
 ])
 class Server {
   public app: Application;
+
   public userRoutes: UserRoutes;
 
   constructor() {

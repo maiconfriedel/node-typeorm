@@ -5,6 +5,7 @@ import UserController from '../controllers/UserController';
 
 export class UserRoutes {
   private routes: Router = Router();
+
   private userController: UserController;
 
   constructor() {
@@ -13,7 +14,6 @@ export class UserRoutes {
 
   registerUserRoutes(): Router {
     this.routes.get('/', (req, res) => this.userController.index(req, res));
-
     return this.routes;
   }
 }

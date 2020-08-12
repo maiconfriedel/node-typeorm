@@ -6,7 +6,7 @@ import IUserRepository from '../../domain/interfaces/repositories/IUserRepositor
 @injectable()
 export default class UserController {
   constructor(
-    @inject('IUserRepository') private userRepository: IUserRepository
+    @inject('IUserRepository') private userRepository: IUserRepository,
   ) {}
 
   async index(req: Request, res: Response) {
