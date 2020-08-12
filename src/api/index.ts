@@ -2,8 +2,20 @@ import 'reflect-metadata';
 import express, { Application } from 'express';
 import { UserRoutes } from './routes/user.routes';
 import startConnection from '../infrastructure/database/connection';
-import ServiceExtensions from './ServiceExtensions';
 
+import { registry, Lifecycle } from 'tsyringe';
+import UserRepository from '../infrastructure/repositories/UserRepository';
+import { Repository } from 'typeorm';
+
+@registry([
+  {
+    token: 'IUserRepository',
+    useClass: UserRepository,
+    options: {
+      lifecycle: Lifecycle.Transient,
+    },
+  },
+])
 class Server {
   public app: Application;
   public userRoutes: UserRoutes;
@@ -14,7 +26,6 @@ class Server {
   }
 
   start() {
-    new ServiceExtensions();
     startConnection();
     this.app.use('/users', this.userRoutes.registerUserRoutes());
     this.app.listen(3333);
