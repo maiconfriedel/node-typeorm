@@ -1,14 +1,24 @@
-import express from 'express';
-import emojis from './emojis';
+import 'reflect-metadata';
+import express, { Application } from 'express';
+import { UserRoutes } from './routes/user.routes';
+import startConnection from '../infrastructure/database/connection';
+import ServiceExtensions from './ServiceExtensions';
 
-const router = express.Router();
+class Server {
+  public app: Application;
+  public userRoutes: UserRoutes;
 
-router.get('/', (req, res) => {
-  res.json({
-    message: 'API - 👋🌎🌍🌏',
-  });
-});
+  constructor() {
+    this.app = express();
+    this.userRoutes = new UserRoutes();
+  }
 
-router.use('/emojis', emojis);
+  start() {
+    new ServiceExtensions();
+    startConnection();
+    this.app.use('/users', this.userRoutes.registerUserRoutes());
+    this.app.listen(3333);
+  }
+}
 
-export default router;
+new Server().start();
