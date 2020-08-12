@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { container } from 'tsyringe';
 
 import UserController from '../controllers/UserController';
-import { Repository } from 'typeorm';
 
 export class UserRoutes {
   private routes: Router = Router();

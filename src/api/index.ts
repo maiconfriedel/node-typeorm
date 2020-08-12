@@ -5,7 +5,6 @@ import startConnection from '../infrastructure/database/connection';
 
 import { registry, Lifecycle } from 'tsyringe';
 import UserRepository from '../infrastructure/repositories/UserRepository';
-import { Repository } from 'typeorm';
 
 @registry([
   {
