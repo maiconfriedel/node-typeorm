@@ -7,7 +7,10 @@ export default async function handleError(
   res: Response,
   next: NextFunction,
 ) {
-  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+  let statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+
+  if (err.statusCode || err.status) statusCode = err.statusCode || err.status;
+
   res.status(statusCode);
   const { errors, message } = err;
   res.json({

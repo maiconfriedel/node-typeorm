@@ -13,4 +13,9 @@ export class UserEntity {
 
   @Column()
   email: string;
+
+  @Column({
+    select: false,
+  })
+  password: string;
 }

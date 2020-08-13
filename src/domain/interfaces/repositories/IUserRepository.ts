@@ -1,3 +1,4 @@
+import { Login } from '../../models/Login';
 import { User } from '../../models/User';
 
 export default interface IUserRepository {
@@ -6,4 +7,6 @@ export default interface IUserRepository {
   create(user: User): Promise<User>;
 
   find(id: string): Promise<User>;
+
+  login(login: { email: string; password: string }): Promise<Login>;
 }

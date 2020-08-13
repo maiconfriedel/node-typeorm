@@ -9,9 +9,7 @@ export class User {
 
   email: string;
 
-  constructor(user: Omit<User, 'id'>) {
-    Object.assign(this, user);
-  }
+  password: string;
 }
 
 export const UserSchema = yup.object<User>({
@@ -23,4 +21,9 @@ export const UserSchema = yup.object<User>({
     .email('Email is not in a valid email format')
     .required('Email is required')
     .trim(),
+  password: yup
+    .string()
+    .required('Password is required')
+    .trim()
+    .min(4, 'Password must have at least 4 characters'),
 });
