@@ -38,7 +38,7 @@ class Server {
     this.app.use(express.json());
     this.app.use('/users', this.userRoutes.registerUserRoutes());
     this.app.use('/login', this.loginRoutes.registerLoginRoutes());
-    this.app.listen(3333);
+    this.app.listen(process.env.PORT || 3333);
     this.app.use(handleError);
   }
 }

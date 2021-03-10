@@ -18,4 +18,9 @@ export class UserEntity {
     select: false,
   })
   password: string;
+
+  @Column({
+    type: 'simple-json',
+  })
+  scopes: string[];
 }

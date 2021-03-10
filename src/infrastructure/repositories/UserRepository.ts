@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import * as jwt from 'jsonwebtoken';
 import { getRepository } from 'typeorm';
 import { ValidationError } from 'yup';
@@ -13,12 +14,19 @@ export default class UserRepository implements IUserRepository {
   };
 
   private encryptPassword = (password: string) => {
-    return password;
+    const algorithm = 'aes-256-ctr';
+    const secretKey = process.env.CRYPTO_KEY;
+
+    const cipher = crypto.createCipher(algorithm, secretKey);
+    let crypted = cipher.update(password, 'utf8', 'hex');
+    crypted += cipher.final('hex');
+
+    return crypted;
   };
 
   async list(): Promise<User[]> {
     const response = await this.userRepo().find({
-      select: ['id', 'firstName', 'lastName', 'email'],
+      select: ['id', 'firstName', 'lastName', 'email', 'scopes'],
     });
 
     return response;
@@ -65,7 +73,10 @@ export default class UserRepository implements IUserRepository {
     }
 
     const accessToken = jwt.sign(
-      { user, scope: ['users.write', 'users.read'] },
+      {
+        user,
+        scope: user.scopes,
+      },
       process.env.JWT_SECRET,
       {
         expiresIn: '1h',
