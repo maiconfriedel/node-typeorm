@@ -1,8 +1,9 @@
 import { Login } from '../../models/Login';
+import { PaginatedList } from '../../models/PaginatedList';
 import { User } from '../../models/User';
 
 export default interface IUserRepository {
-  list(): Promise<User[]>;
+  list(pageIndex: number, pageSize: number): Promise<PaginatedList<User>>;
 
   create(user: User): Promise<User>;
 

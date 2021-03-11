@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 import { Response, NextFunction, Request } from 'express';
 import { injectable, inject } from 'tsyringe';
 import { ValidationError } from 'yup';
@@ -13,9 +14,18 @@ export default class UserController {
   ) {}
 
   async index(req: Request, res: Response) {
-    const response = await this.userRepository.list();
+    let pageIndex = 1;
+    let pageSize = 10;
 
-    return res.json(response);
+    if (req.query.pageIndex) {
+      pageIndex = parseInt(req.query.pageIndex?.toString());
+    }
+
+    if (req.query.pageSize) {
+      pageSize = parseInt(req.query.pageSize?.toString());
+    }
+
+    return res.json(await this.userRepository.list(pageIndex, pageSize));
   }
 
   async find(req: Request, res: Response) {

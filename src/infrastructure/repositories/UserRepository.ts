@@ -4,6 +4,7 @@ import { ValidationError } from 'yup';
 
 import IUserRepository from '../../domain/interfaces/repositories/IUserRepository';
 import { Login } from '../../domain/models/Login';
+import { PaginatedList } from '../../domain/models/PaginatedList';
 import { User } from '../../domain/models/User';
 import { UserEntity } from '../database/entities/UserEntity';
 
@@ -19,10 +20,21 @@ export default class UserRepository implements IUserRepository {
     return crypted;
   };
 
-  async list(): Promise<User[]> {
-    const response = await UserEntity.find();
+  async list(
+    pageIndex: number,
+    pageSize: number,
+  ): Promise<PaginatedList<User>> {
+    const response = await UserEntity.find({
+      skip: (pageIndex - 1) * pageIndex,
+      take: pageSize,
+    });
 
-    return response;
+    return new PaginatedList(
+      response,
+      pageIndex,
+      pageSize,
+      await UserEntity.count(),
+    );
   }
 
   async create(user: User): Promise<User> {

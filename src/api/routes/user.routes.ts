@@ -29,12 +29,16 @@ export class UserRoutes {
     // must authenticate to the routes below
     this.routes.use(this.validJwtMiddleware);
 
-    this.routes.get('/', this.guard.check('users.read'), (req, res) =>
-      this.userController.index(req, res),
+    this.routes.get(
+      '/',
+      this.guard.check([['admin'], ['users.read']]),
+      (req, res) => this.userController.index(req, res),
     );
 
-    this.routes.get('/:id', this.guard.check('users.read'), (req, res) =>
-      this.userController.find(req, res),
+    this.routes.get(
+      '/:id',
+      this.guard.check([['admin'], ['users.read']]),
+      (req, res) => this.userController.find(req, res),
     );
 
     this.routes.put(
