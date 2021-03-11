@@ -37,6 +37,8 @@ export class UserRoutes {
       this.userController.find(req, res),
     );
 
+    this.routes.put('/:id', (req, res) => this.userController.update(req, res));
+
     return this.routes;
   }
 }

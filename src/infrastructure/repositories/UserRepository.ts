@@ -54,6 +54,22 @@ export default class UserRepository implements IUserRepository {
     return response;
   }
 
+  async update(id: string, user: User): Promise<User> {
+    const userEntity = await UserEntity.findOne({
+      where: { id },
+    });
+
+    if (!user) {
+      throw new ValidationError([`User with id ${id} not found`], id, 'id');
+    }
+
+    if (user.firstName) userEntity.firstName = user.firstName;
+    if (user.lastName) userEntity.lastName = user.lastName;
+    if (user.scopes) userEntity.scopes = user.scopes;
+
+    return userEntity.save();
+  }
+
   async login(login: { email: string; password: string }): Promise<Login> {
     const { email, password } = login;
 

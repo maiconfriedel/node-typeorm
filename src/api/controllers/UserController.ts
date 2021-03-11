@@ -22,6 +22,10 @@ export default class UserController {
     return res.json(await this.userRepository.find(req.params.id));
   }
 
+  async update(req: Request, res: Response) {
+    return res.json(await this.userRepository.update(req.params.id, req.body));
+  }
+
   async create(req: Request, res: Response, next: NextFunction) {
     try {
       const validatedUser = await UserSchema.validate(req.body, {

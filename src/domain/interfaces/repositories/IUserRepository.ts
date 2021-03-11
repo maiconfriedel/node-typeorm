@@ -9,4 +9,6 @@ export default interface IUserRepository {
   find(id: string): Promise<User>;
 
   login(login: { email: string; password: string }): Promise<Login>;
+
+  update(id: string, user: User): Promise<User>;
 }
