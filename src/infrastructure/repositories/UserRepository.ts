@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import * as jwt from 'jsonwebtoken';
-import { getRepository } from 'typeorm';
 import { ValidationError } from 'yup';
 
 import IUserRepository from '../../domain/interfaces/repositories/IUserRepository';
@@ -9,10 +8,6 @@ import { User } from '../../domain/models/User';
 import { UserEntity } from '../database/entities/UserEntity';
 
 export default class UserRepository implements IUserRepository {
-  private userRepo = () => {
-    return getRepository(UserEntity);
-  };
-
   private encryptPassword = (password: string) => {
     const algorithm = 'aes-256-ctr';
     const secretKey = process.env.CRYPTO_KEY;
@@ -25,13 +20,13 @@ export default class UserRepository implements IUserRepository {
   };
 
   async list(): Promise<User[]> {
-    const response = await this.userRepo().find();
+    const response = await UserEntity.find();
 
     return response;
   }
 
   async create(user: User): Promise<User> {
-    const existingUser = await this.userRepo().findOne({
+    const existingUser = await UserEntity.findOne({
       where: { email: user.email },
     });
 
@@ -39,15 +34,20 @@ export default class UserRepository implements IUserRepository {
       return existingUser;
     }
 
+    if (!user.scopes) user.scopes = [];
+
     user.password = this.encryptPassword(user.password);
 
-    const response = await this.userRepo().save(user);
+    const response = UserEntity.create(user);
+
+    await response.save();
+
     delete response.password;
     return response;
   }
 
   async find(id: string): Promise<User> {
-    const response = await this.userRepo().findOne({
+    const response = await UserEntity.findOne({
       where: { id },
     });
 
@@ -57,7 +57,7 @@ export default class UserRepository implements IUserRepository {
   async login(login: { email: string; password: string }): Promise<Login> {
     const { email, password } = login;
 
-    const user = await this.userRepo().findOne({
+    const user = await UserEntity.findOne({
       where: { email, password: this.encryptPassword(password) },
     });
 
