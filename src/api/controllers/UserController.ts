@@ -22,8 +22,18 @@ export default class UserController {
     return res.json(await this.userRepository.find(req.params.id));
   }
 
-  async update(req: Request, res: Response) {
-    return res.json(await this.userRepository.update(req.params.id, req.body));
+  async update(req: Request, res: Response, next: NextFunction) {
+    try {
+      return res.json(
+        await this.userRepository.update(req.params.id, req.body),
+      );
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        next(new BadRequest(err.message, err.errors));
+      } else {
+        next(err);
+      }
+    }
   }
 
   async create(req: Request, res: Response, next: NextFunction) {
@@ -32,9 +42,9 @@ export default class UserController {
         abortEarly: false,
       });
 
-      const createdUser = await this.userRepository.create(validatedUser);
-
-      return res.status(201).json(createdUser);
+      return res
+        .status(201)
+        .json(await this.userRepository.create(validatedUser));
     } catch (err) {
       if (err instanceof ValidationError) {
         next(new BadRequest(err.message, err.errors));

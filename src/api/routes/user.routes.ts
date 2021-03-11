@@ -37,7 +37,11 @@ export class UserRoutes {
       this.userController.find(req, res),
     );
 
-    this.routes.put('/:id', (req, res) => this.userController.update(req, res));
+    this.routes.put(
+      '/:id',
+      this.guard.check([['admin'], ['users.write']]),
+      (req, res, next) => this.userController.update(req, res, next),
+    );
 
     return this.routes;
   }
