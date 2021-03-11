@@ -1,40 +1,42 @@
 import { Router } from 'express';
-import validJwt from 'express-jwt';
+import validJwt, { RequestHandler } from 'express-jwt';
 import guard from 'express-jwt-permissions';
-import { container } from 'tsyringe';
+import { inject, injectable } from 'tsyringe';
 
 import UserController from '../controllers/UserController';
 
+@injectable()
 export class UserRoutes {
   private routes: Router = Router();
 
   private guard: any;
 
-  private userController: UserController;
+  private validJwtMiddleware: RequestHandler;
 
-  constructor() {
-    this.userController = container.resolve(UserController);
+  constructor(@inject(UserController) private userController: UserController) {
     this.guard = guard({ permissionsProperty: 'scope' });
+    this.validJwtMiddleware = validJwt({
+      secret: process.env.JWT_SECRET,
+      algorithms: ['HS256'],
+    });
   }
 
   registerUserRoutes(): Router {
-    this.routes.get(
-      '/',
-      validJwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] }),
-      this.guard.check('users.read'),
-      (req, res) => this.userController.index(req, res),
-    );
-
-    this.routes.get(
-      '/:id',
-      validJwt({ secret: process.env.JWT_SECRET, algorithms: ['HS256'] }),
-      this.guard.check('users.read'),
-      (req, res) => this.userController.find(req, res),
-    );
-
+    // doesn't need authentication
     this.routes.post('/', (req, res, next) =>
       this.userController.create(req, res, next),
     );
+    // must authenticate to the routes below
+    this.routes.use(this.validJwtMiddleware);
+
+    this.routes.get('/', this.guard.check('users.read'), (req, res) =>
+      this.userController.index(req, res),
+    );
+
+    this.routes.get('/:id', this.guard.check('users.read'), (req, res) =>
+      this.userController.find(req, res),
+    );
+
     return this.routes;
   }
 }

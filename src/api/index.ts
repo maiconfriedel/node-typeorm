@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import dotenv from 'dotenv';
 import express, { Application } from 'express';
-import { registry, Lifecycle } from 'tsyringe';
+import { registry, Lifecycle, injectable, inject, container } from 'tsyringe';
 
 import startConnection from '../infrastructure/database/connection';
 import UserRepository from '../infrastructure/repositories/UserRepository';
@@ -11,6 +11,7 @@ import { UserRoutes } from './routes/user.routes';
 
 dotenv.config();
 
+// register dependencies in the DI container
 @registry([
   {
     token: 'IUserRepository',
@@ -20,17 +21,15 @@ dotenv.config();
     },
   },
 ])
+@injectable()
 class Server {
   public app: Application;
 
-  public userRoutes: UserRoutes;
-
-  public loginRoutes: LoginRoutes;
-
-  constructor() {
+  constructor(
+    @inject(UserRoutes) private userRoutes: UserRoutes,
+    @inject(LoginRoutes) private loginRoutes: LoginRoutes,
+  ) {
     this.app = express();
-    this.userRoutes = new UserRoutes();
-    this.loginRoutes = new LoginRoutes();
   }
 
   start() {
@@ -43,4 +42,4 @@ class Server {
   }
 }
 
-new Server().start();
+container.resolve(Server).start();

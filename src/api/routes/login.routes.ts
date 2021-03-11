@@ -1,16 +1,15 @@
 import { Router } from 'express';
-import { container } from 'tsyringe';
+import { injectable, inject } from 'tsyringe';
 
 import LoginController from '../controllers/LoginController';
 
+@injectable()
 export class LoginRoutes {
   private routes: Router = Router();
 
-  private loginController: LoginController;
-
-  constructor() {
-    this.loginController = container.resolve(LoginController);
-  }
+  constructor(
+    @inject(LoginController) private loginController: LoginController,
+  ) {}
 
   registerLoginRoutes(): Router {
     this.routes.post('/', (req, res, next) =>
