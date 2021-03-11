@@ -25,7 +25,7 @@ export default class UserRepository implements IUserRepository {
     pageSize: number,
   ): Promise<PaginatedList<User>> {
     const response = await UserEntity.find({
-      skip: (pageIndex - 1) * pageIndex,
+      skip: (pageIndex - 1) * pageSize,
       take: pageSize,
     });
 
