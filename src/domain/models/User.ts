@@ -28,5 +28,5 @@ export const UserSchema = yup.object<User>({
     .required('Password is required')
     .trim()
     .min(4, 'Password must have at least 4 characters'),
-  scopes: yup.array(),
+  scopes: yup.array(yup.string()),
 });

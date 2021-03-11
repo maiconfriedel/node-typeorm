@@ -25,9 +25,7 @@ export default class UserRepository implements IUserRepository {
   };
 
   async list(): Promise<User[]> {
-    const response = await this.userRepo().find({
-      select: ['id', 'firstName', 'lastName', 'email', 'scopes'],
-    });
+    const response = await this.userRepo().find();
 
     return response;
   }
@@ -35,7 +33,6 @@ export default class UserRepository implements IUserRepository {
   async create(user: User): Promise<User> {
     const existingUser = await this.userRepo().findOne({
       where: { email: user.email },
-      select: ['id', 'firstName', 'lastName', 'email'],
     });
 
     if (existingUser) {
@@ -66,7 +63,7 @@ export default class UserRepository implements IUserRepository {
 
     if (!user) {
       throw new ValidationError(
-        'Invalid email and password provided',
+        ['Invalid email and password provided'],
         email,
         'email_password',
       );
